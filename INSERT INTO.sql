@@ -2,6 +2,18 @@ INSERT INTO dbo.Alunos
 (id_aluno, nome, data_nascimento, sexo, data_cadastro, login_cadastro)
 VALUES
 (
+	1,
+	'Joao silva',
+	'1999/10/14',
+	'M',
+	'2022/11/23 08:55:00',
+	'nicolas.lima'
+)
+
+INSERT INTO dbo.Alunos
+(id_aluno, nome, data_nascimento, sexo, data_cadastro, login_cadastro)
+VALUES
+(
 	2,
 	'Alessandro Soares', 
 	'1989/10/04',
@@ -10,6 +22,17 @@ VALUES
 	'nicolas.lima'
 )
 
+INSERT INTO dbo.Alunos
+(id_aluno, nome, data_nascimento, sexo, data_cadastro, login_cadastro)
+VALUES
+(
+	3,
+	'Aline Fariaz', 
+	'2001/09/24',
+	'F',
+	'2022/11/23 08:55:00',
+	'nicolas.lima'
+)
 
 SELECT * FROM dbo.Alunos
 
@@ -28,3 +51,4 @@ VALUES
 (3, 'Ausente Com Justificativa','2022/11/23 08:55:00', 'nicolas.lima')
 
 SELECT * FROM dbo.Situacao
+
