@@ -1,0 +1,100 @@
+--CASE...ELSE...END
+------------------------------
+
+DROP TABLE TTEMP;
+
+
+SELECT X.*
+	INTO TTEMP
+	FROM  (
+				SELECT  ROW_NUMBER() OVER(ORDER BY Y.ID_ALUNO) AS LINHA,
+						Y.id_aluno,
+						Y.NOME,
+						Y.SEXO,
+						Y.NOME_CURSO,
+						Y.DATA_INICIO,
+						Y.data_termino,
+						Y.valor
+					FROM (
+							SELECT	A.id_aluno,
+									A.nome,
+									A.sexo,
+									C.nome_curso,
+									T.data_inicio,
+									T.data_termino,
+									AT.valor
+								FROM AlunosxTurmas AT
+									INNER JOIN TURMAS T ON T.id_turma = AT.id_turma
+									INNER JOIN CURSOS C ON C.id_curso = T.id_curso
+									INNER JOIN ALUNOS A ON A.id_aluno = AT.id_aluno
+							) Y
+			) X
+
+SELECT * FROM TTEMP;
+
+--UTILIZANDO O CASE...WHEN...THEN
+
+UPDATE TTEMP
+SET SEXO = NULL
+WHERE id_aluno IN (3,5, 7);
+
+SELECT	NOME,
+		CASE SEXO
+			 WHEN 'M' THEN 'Masculino'
+			 WHEN 'F' THEN 'Feminino'
+		ELSE 'Verifique'
+		END AS SEXO,
+		NOME_CURSO
+	FROM TTEMP;
+
+--CHECAGEM DE SEXO
+
+SELECT X.*
+	FROM (
+			SELECT	NOME,
+					CASE SEXO
+						WHEN 'M' THEN 'Masculino'
+						WHEN 'F' THEN 'Feminino'
+					ELSE 'VERIFIQUE'
+					END AS SEXO,
+					NOME_CURSO
+				FROM TTEMP
+		 ) X
+	WHERE SEXO = 'VERIFIQUE'
+
+------
+
+SELECT	NOME,
+		NOME_CURSO,
+		VALOR,
+		CONVERT(DATE, DATA_INICIO) DT_INICIO,
+		CASE YEAR(DATA_INICIO)
+			WHEN 2021 THEN 'ANO ANTERIOR'
+			WHEN 2022 THEN 'ANO TUAL'
+			WHEN 2023 THEN 'PROXIMO ANO'
+		ELSE 'ANO INVALIDO'
+		END AS ANALISE_ANO
+	FROM TTEMP
+
+
+------
+SELECT	NOME,
+		DATA_NASCIMENTO,
+		DATEDIFF(YEAR, DATA_NASCIMENTO, GETDATE()) IDADE,
+		CASE
+			WHEN DATEDIFF(YEAR, DATA_NASCIMENTO, GETDATE()) < 18 THEN 'MENOR DE IDADE'
+			WHEN DATEDIFF(YEAR, DATA_NASCIMENTO, GETDATE()) >= 18 THEN 'MAIOR DE IDADE'
+		END STATUS_IDADE
+	FROM ALUNOS;
+
+
+------
+
+SELECT	NOME, NOME_CURSO, SEXO
+	FROM TTEMP
+ORDER BY
+	CASE SEXO WHEN 'M' THEN 'MASCULINO'
+			  WHEN 'F' THEN 'FEMININO'
+	ELSE
+		'SEXO_INVALIDO' -- NAO TROCA OS DADOS PORQUE O CASE ESTA SENDO USADO NO ORDER BY
+	END DESC;
